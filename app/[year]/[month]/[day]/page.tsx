@@ -46,6 +46,27 @@ const DayRow = ({ time = "00:00", position }: DayRowProps) => {
   );
 };
 
+const TEST_EVENTS = [
+  {
+    id: "1",
+    name: "Some event",
+    start: "02:00",
+    end: "04:00",
+  },
+  {
+    id: "2",
+    name: "Another event",
+    start: "08:00",
+    end: "12:00",
+  },
+  {
+    id: "3",
+    name: "Last event",
+    start: "19:00",
+    end: "00:00",
+  },
+];
+
 export default function DayPage({
   params,
 }: {
@@ -99,21 +120,41 @@ export default function DayPage({
           })}
 
           {/* TODO: events */}
-          <div className="absolute col-start-2 row-start-3 row-end-5 h-full w-full px-0.5 ">
-            <div className="h-full w-full rounded-md bg-yellow-400">
-              some event
-            </div>
-          </div>
-
-          <div className="absolute col-start-2 row-start-9 row-end-13 h-full w-full px-0.5 ">
-            <div className="h-full w-full rounded-md bg-yellow-400">
-              another event
-            </div>
-          </div>
+          {TEST_EVENTS.map((event) => (
+            <Event key={event.id} start={event.start} end={event.end}>
+              {event.name}
+            </Event>
+          ))}
         </div>
       </div>
     </div>
   );
+}
+
+const Event = ({ start, end, children }) => {
+  const startPosition = convertTimeToPosition(start);
+  const endPosition = convertTimeToPosition(end);
+
+  return (
+    <div
+      className={`row-start-${startPosition} row-end-${endPosition} absolute col-start-2 h-full w-full px-0.5 `}
+    >
+      <div className="h-full w-full rounded-md bg-yellow-400">{children}</div>
+    </div>
+  );
+};
+
+function convertTimeToPosition(time: string) {
+  if (time === "00:00") {
+    return 1;
+  }
+
+  // Remove trailing minutes and leading zero
+  const hour = time.replace(":00", "").replace(/^0/, "");
+  const hourNumber = parseInt(hour, 10);
+
+  // Add one to account for the grid rows starting at 1
+  return hourNumber + 1;
 }
 
 // TODO: only allow days that exist in selected month
