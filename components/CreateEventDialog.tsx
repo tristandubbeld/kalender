@@ -4,6 +4,7 @@ import { useState } from "react";
 import formatDate from "date-fns/format";
 import { v4 as uuidv4 } from "uuid";
 
+import { Event } from "@/types/event";
 import { HOURS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +61,7 @@ export const CreateEventDialog = ({
           // Generate a unique id for the event
           const id = uuidv4();
 
-          const event = {
+          const event: Event = {
             id,
             date,
             name,

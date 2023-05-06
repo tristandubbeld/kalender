@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { Event } from "@/types/event";
 import { HOURS } from "@/lib/constants";
 import { TimeSlot } from "@/components/TimeSlot";
 
@@ -47,32 +52,23 @@ const Event = ({ start, end, children }: EventProps) => {
   );
 };
 
-const TEST_EVENTS = [
-  {
-    id: "1",
-    name: "Some event",
-    start: "02:00",
-    end: "04:00",
-  },
-  {
-    id: "2",
-    name: "Another event",
-    start: "08:00",
-    end: "12:00",
-  },
-  {
-    id: "3",
-    name: "Last event",
-    start: "19:00",
-    end: "00:00",
-  },
-];
-
 type DayViewProps = {
   date: Date;
 };
 
 export const DayView = ({ date }: DayViewProps) => {
+  const [events, setEvents] = useState<{ [key: string]: Event }>({});
+
+  useEffect(() => {
+    // Grab current day events from localStorage
+    const storedEvents = JSON.parse(
+      localStorage.getItem(date.toString()) || "{}"
+    );
+
+    // Set to state
+    setEvents(storedEvents);
+  }, [date]);
+
   return (
     <div className="flex w-full flex-col">
       <div className="relative grid auto-rows-cal-lg grid-cols-cal-day">
@@ -89,11 +85,13 @@ export const DayView = ({ date }: DayViewProps) => {
           );
         })}
 
-        {TEST_EVENTS.map((event) => (
-          <Event key={event.id} start={event.start} end={event.end}>
-            {event.name}
-          </Event>
-        ))}
+        {Object.values(events).map((event) => {
+          return (
+            <Event key={event.id} start={event.start} end={event.end}>
+              {event.name}
+            </Event>
+          );
+        })}
       </div>
     </div>
   );
