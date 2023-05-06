@@ -7,5 +7,5 @@ export default function IndexPage() {
         Work in progress, we should probably redirect to todays date.
       </section>
     </main>
-  )
+  );
 }
