@@ -57,9 +57,10 @@ export default function DayPage({
   const weekDay = formatDate(date, "EEEE");
   const weekNumber = getWeek(date, { weekStartsOn: 1 });
 
+  const monthLink = `/${formatDate(date, "yyyy/MM")}`;
+  const weekLink = `/${formatDate(date, "yyyy")}/week/${weekNumber}`;
   const prevDayLink = `/${formatDate(sub(date, { days: 1 }), "yyyy/MM/dd")}`;
   const nextDayLink = `/${formatDate(add(date, { days: 1 }), "yyyy/MM/dd")}`;
-  const monthLink = `/${formatDate(date, "yyyy/MM")}`;
 
   return (
     <div className="flex flex-col p-4">
@@ -77,7 +78,12 @@ export default function DayPage({
         </Link>
 
         <div className="flex items-center">
-          <Button variant="secondary">Week {weekNumber}</Button>
+          <Link
+            href={weekLink}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Week {weekNumber}
+          </Link>
 
           <div className="w-2" />
 
