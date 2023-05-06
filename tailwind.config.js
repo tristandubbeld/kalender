@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme")
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -70,7 +70,61 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      gridTemplateColumns: {
+        "cal-day": "min-content 1fr",
+      },
+      gridAutoRows: {
+        "cal-sm": "2rem",
+        "cal-lg": "2.5rem",
+      },
+      /**
+       * Extend the grid row start utility with our custom values because
+       * tailwind lacks these utilities by default. We need to go up to 23 because
+       * of the times.
+       */
+      gridRowStart: {
+        8: "8",
+        9: "9",
+        10: "10",
+        11: "11",
+        12: "12",
+        13: "13",
+        14: "14",
+        15: "15",
+        16: "16",
+        17: "17",
+        18: "18",
+        19: "19",
+        20: "20",
+        21: "21",
+        22: "22",
+        23: "23",
+      },
+      /**
+       * Extend the grid row end utility with our custom values because
+       * tailwind lacks these utilities by default. We need to go up to 24 because
+       * of the times.
+       */
+      gridRowEnd: {
+        8: "8",
+        9: "9",
+        10: "10",
+        11: "11",
+        12: "12",
+        13: "13",
+        14: "14",
+        15: "15",
+        16: "16",
+        17: "17",
+        18: "18",
+        19: "19",
+        20: "20",
+        21: "21",
+        22: "22",
+        23: "23",
+        24: "24",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
