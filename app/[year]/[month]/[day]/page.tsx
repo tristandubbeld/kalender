@@ -1,5 +1,9 @@
 import formatDate from "date-fns/format";
 
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { CreateEventDialog } from "@/components/CreateEventDialog";
+
 export default function DayPage({
   params,
 }: {
@@ -17,6 +21,12 @@ export default function DayPage({
       </h1>
       <div>{dayName}</div>
       <div>{dateName}</div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Create event</Button>
+        </DialogTrigger>
+        <CreateEventDialog dateName={dateName} />
+      </Dialog>
     </div>
   );
 }
