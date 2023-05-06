@@ -27,15 +27,18 @@ type EditEventDialogProps = {
 };
 
 export const EditEventDialog = ({ id, close }: EditEventDialogProps) => {
-  const { events, updateEvent } = useEvents();
-  const currentEvent = events[id];
+  const { events, updateEvent, deleteEvent } = useEvents();
+  const currentEvent: Event | undefined = events[id] || undefined;
 
-  console.log("currentEvent", currentEvent);
+  const [name, setName] = useState(currentEvent?.name);
+  const [start, setStart] = useState(currentEvent?.start);
+  const [end, setEnd] = useState(currentEvent?.end);
+
+  if (currentEvent === undefined) {
+    return null;
+  }
 
   const dateName = formatDate(new Date(currentEvent.date), "EEEE MMMM do");
-  const [name, setName] = useState(currentEvent.name);
-  const [start, setStart] = useState(currentEvent.start);
-  const [end, setEnd] = useState(currentEvent.end);
 
   return (
     <DialogContent>
@@ -113,6 +116,15 @@ export const EditEventDialog = ({ id, close }: EditEventDialogProps) => {
         </div>
         <Button type="submit">Update event</Button>
       </form>
+      <Button
+        variant="destructive"
+        onClick={() => {
+          deleteEvent(currentEvent.id);
+          close();
+        }}
+      >
+        Delete event
+      </Button>
     </DialogContent>
   );
 };

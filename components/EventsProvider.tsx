@@ -9,6 +9,7 @@ const EventsContext = createContext<
       events: { [key: string]: Event };
       createEvent: (id: string, event: Event) => void;
       updateEvent: (id: string, event: Event) => void;
+      deleteEvent: (id: string) => void;
     }
   | undefined
 >(undefined);
@@ -66,8 +67,23 @@ export const EventsProvider = ({ date, children }: EventsProviderProps) => {
     createEvent(id, event);
   };
 
+  const deleteEvent = (id: string) => {
+    const eventDateString = date.toString();
+
+    delete events[id];
+
+    // Save to localStorage
+    localStorage.setItem(eventDateString, JSON.stringify(events));
+
+    // And set the state to reload the view with a new object, when it's
+    // the same object reference react doesn't refresh state.
+    setEvents({ ...events });
+  };
+
   return (
-    <EventsContext.Provider value={{ events, createEvent, updateEvent }}>
+    <EventsContext.Provider
+      value={{ events, createEvent, updateEvent, deleteEvent }}
+    >
       {children}
     </EventsContext.Provider>
   );
