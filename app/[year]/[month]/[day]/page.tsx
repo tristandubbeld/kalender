@@ -1,47 +1,24 @@
-import { VariantProps, cva } from "class-variance-authority";
+import Link from "next/link";
+import add from "date-fns/add";
 import formatDate from "date-fns/format";
-import { Plus } from "lucide-react";
+import getWeek from "date-fns/getWeek";
+import sub from "date-fns/sub";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { HOURS } from "@/lib/constants";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { CreateEventDialog } from "@/components/CreateEventDialog";
-
-const timeSlotVariants = cva("border-l-2 border-r-2 border-b-2", {
-  variants: {
-    position: {
-      top: "border-t-2 rounded-t-md",
-      bottom: "rounded-b-md",
-    },
-  },
-});
-
-type TimeSlotProps = VariantProps<typeof timeSlotVariants>;
-
-export const TimeSlot = ({ position }: TimeSlotProps) => {
-  return (
-    <div className={timeSlotVariants({ position })}>
-      <button
-        className="h-full w-full"
-        // onClick={() => {
-        //   console.log("click");
-        // }}
-      >
-        {/* TODO: visuallyhidden text? */}
-      </button>
-    </div>
-  );
-};
+import { Button, buttonVariants } from "@/components/ui/button";
+import { TimeSlot } from "@/components/TimeSlot";
 
 type DayRowProps = Pick<React.ComponentProps<typeof TimeSlot>, "position"> & {
+  date: Date;
   time?: string;
 };
 
-const DayRow = ({ time = "00:00", position }: DayRowProps) => {
+const DayRow = ({ date, time = "00:00", position }: DayRowProps) => {
   return (
     <>
       <div className="pr-2 text-center text-sm leading-none">{time}</div>
-      <TimeSlot position={position} />
+      <TimeSlot position={position} time={time} date={date} />
     </>
   );
 };
@@ -78,30 +55,43 @@ export default function DayPage({
   const dateNumber = formatDate(date, "d");
   const month = formatDate(date, "MMMM");
   const weekDay = formatDate(date, "EEEE");
+  const weekNumber = getWeek(date, { weekStartsOn: 1 });
+
+  const prevDayLink = `/${formatDate(sub(date, { days: 1 }), "yyyy/MM/dd")}`;
+  const nextDayLink = `/${formatDate(add(date, { days: 1 }), "yyyy/MM/dd")}`;
+  const monthLink = `/${formatDate(date, "yyyy/MM")}`;
 
   return (
     <div className="flex flex-col p-4">
-      <div className="ml-12 flex items-center justify-between">
+      <div className="text-center">
+        <h1 className="rounded-md text-4xl font-semibold">{dateNumber}</h1>
+        <span className="text-sm">{weekDay}</span>
+        <div className="w-2" />
+      </div>
+
+      <div className="h-4" />
+
+      <div className="flex items-center justify-between">
+        <Link className={buttonVariants({})} href={prevDayLink}>
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+
         <div className="flex items-center">
-          <h1 className="rounded-md text-4xl font-semibold">{dateNumber}</h1>
-          <div className="w-2" />
-          <span className="text-sm">{weekDay}</span>
-        </div>
-        <div className="flex justify-end">
-          <Button variant="secondary">{month}</Button>
+          <Button variant="secondary">Week {weekNumber}</Button>
 
           <div className="w-2" />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                New event
-              </Button>
-            </DialogTrigger>
-            <CreateEventDialog dateName={dateName} />
-          </Dialog>
+          <Link
+            href={monthLink}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            {month}
+          </Link>
         </div>
+
+        <Link className={buttonVariants({})} href={nextDayLink}>
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
       <div className="h-4" />
@@ -116,7 +106,9 @@ export default function DayPage({
                 ? "bottom"
                 : undefined;
 
-            return <DayRow key={time} time={time} position={position} />;
+            return (
+              <DayRow key={time} date={date} time={time} position={position} />
+            );
           })}
 
           {/* TODO: events */}

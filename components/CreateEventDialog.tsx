@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import formatDate from "date-fns/format";
 
 import { HOURS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -21,14 +22,28 @@ import {
 } from "@/components/ui/select";
 
 type CreateEventDialogProps = {
-  // TODO: change datename to just date, and format it in the component
-  dateName: string;
+  date: Date;
+  startTime?: string;
 };
 
-export const CreateEventDialog = ({ dateName }: CreateEventDialogProps) => {
+function calculateEndTime(startTime: string) {
+  const endTime = HOURS.findIndex((hour) => hour === startTime) + 1;
+  return HOURS[endTime] || "00:00";
+}
+
+export const CreateEventDialog = ({
+  date,
+  startTime = "00:00",
+}: CreateEventDialogProps) => {
+  const dateName = formatDate(date, "EEEE MMMM do");
+
+  // Calculate end time based on start time, one hour from
+  // the start time.
+  const endTime = calculateEndTime(startTime);
+
   const [name, setName] = useState("");
-  const [start, setStart] = useState("00:00");
-  const [end, setEnd] = useState("01:00");
+  const [start, setStart] = useState(startTime);
+  const [end, setEnd] = useState(endTime);
 
   return (
     <DialogContent>
