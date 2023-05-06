@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { Event } from "@/types/event";
 import { HOURS } from "@/lib/constants";
+import { useEvents } from "@/components/EventsProvider";
 import { TimeSlot } from "@/components/TimeSlot";
 
 type DayRowProps = Pick<React.ComponentProps<typeof TimeSlot>, "position"> & {
@@ -57,17 +55,7 @@ type DayViewProps = {
 };
 
 export const DayView = ({ date }: DayViewProps) => {
-  const [events, setEvents] = useState<{ [key: string]: Event }>({});
-
-  useEffect(() => {
-    // Grab current day events from localStorage
-    const storedEvents = JSON.parse(
-      localStorage.getItem(date.toString()) || "{}"
-    );
-
-    // Set to state
-    setEvents(storedEvents);
-  }, [date]);
+  const { events } = useEvents();
 
   return (
     <div className="flex w-full flex-col">

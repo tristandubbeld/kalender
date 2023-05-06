@@ -22,10 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEvents } from "@/components/EventsProvider";
 
 type CreateEventDialogProps = {
   date: Date;
   startTime?: string;
+  close: () => void;
 };
 
 function calculateEndTime(startTime: string) {
@@ -36,9 +38,11 @@ function calculateEndTime(startTime: string) {
 export const CreateEventDialog = ({
   date,
   startTime = "00:00",
+  close,
 }: CreateEventDialogProps) => {
-  const dateName = formatDate(date, "EEEE MMMM do");
+  const { createEvent } = useEvents();
 
+  const dateName = formatDate(date, "EEEE MMMM do");
   // Calculate end time based on start time, one hour from
   // the start time.
   const endTime = calculateEndTime(startTime);
@@ -69,27 +73,8 @@ export const CreateEventDialog = ({
             end,
           };
 
-          // Check if the current day already has events
-          const eventDateString = date.toString();
-          const eventsInStorage = localStorage.getItem(eventDateString);
-
-          // Object for events on this day
-          let events = {};
-
-          if (eventsInStorage) {
-            const existingEvents = JSON.parse(eventsInStorage);
-
-            events = {
-              ...existingEvents,
-              [id]: event,
-            };
-          } else {
-            events = {
-              [id]: event,
-            };
-          }
-
-          localStorage.setItem(eventDateString, JSON.stringify(events));
+          createEvent(id, event);
+          close();
         }}
       >
         <div>

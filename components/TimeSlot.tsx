@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { VariantProps, cva } from "class-variance-authority";
 
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -20,15 +21,21 @@ type TimeSlotProps = VariantProps<typeof timeSlotVariants> & {
 };
 
 export const TimeSlot = ({ date, time, position }: TimeSlotProps) => {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <div className={timeSlotVariants({ position })}>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
           <button className="h-full w-full">
             {/* TODO: visuallyhidden text? */}
           </button>
         </DialogTrigger>
-        <CreateEventDialog date={date} startTime={time} />
+        <CreateEventDialog date={date} startTime={time} close={closeDialog} />
       </Dialog>
     </div>
   );

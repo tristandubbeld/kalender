@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { DayView } from "@/components/DayView";
+import { EventsProvider } from "@/components/EventsProvider";
 
 export default function DayPage({
   params,
@@ -65,7 +66,9 @@ export default function DayPage({
 
       <div className="h-4" />
 
-      <DayView date={date} />
+      <EventsProvider date={date}>
+        <DayView date={date} />
+      </EventsProvider>
     </div>
   );
 }
