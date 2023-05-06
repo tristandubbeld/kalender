@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import formatDate from "date-fns/format";
+import { v4 as uuidv4 } from "uuid";
 
 import { HOURS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,38 @@ export const CreateEventDialog = ({
         onSubmit={(e) => {
           e.preventDefault();
 
-          console.log({ name, start, end });
+          // Generate a unique id for the event
+          const id = uuidv4();
+
+          const event = {
+            id,
+            date,
+            name,
+            start,
+            end,
+          };
+
+          // Check if the current day already has events
+          const eventDateString = date.toString();
+          const eventsInStorage = localStorage.getItem(eventDateString);
+
+          // Object for events on this day
+          let events = {};
+
+          if (eventsInStorage) {
+            const existingEvents = JSON.parse(eventsInStorage);
+
+            events = {
+              ...existingEvents,
+              [id]: event,
+            };
+          } else {
+            events = {
+              [id]: event,
+            };
+          }
+
+          localStorage.setItem(eventDateString, JSON.stringify(events));
         }}
       >
         <div>

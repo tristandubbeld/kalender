@@ -6,7 +6,7 @@ import sub from "date-fns/sub";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { HOURS } from "@/lib/constants";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { TimeSlot } from "@/components/TimeSlot";
 
 type DayRowProps = Pick<React.ComponentProps<typeof TimeSlot>, "position"> & {
@@ -51,7 +51,6 @@ export default function DayPage({
 }) {
   const monthIndex = params.month - 1; // Date months are zero based
   const date = new Date(params.year, monthIndex, params.day);
-  const dateName = formatDate(date, "EEEE MMMM do");
   const dateNumber = formatDate(date, "d");
   const month = formatDate(date, "MMMM");
   const weekDay = formatDate(date, "EEEE");
