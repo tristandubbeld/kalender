@@ -123,7 +123,13 @@ export default function DayPage({
   );
 }
 
-const Event = ({ start, end, children }) => {
+type EventProps = {
+  start: string;
+  end: string;
+  children: React.ReactNode;
+};
+
+const Event = ({ start, end, children }: EventProps) => {
   const startPosition = convertTimeToPosition(start);
   const endPosition = convertTimeToPosition(end);
 
