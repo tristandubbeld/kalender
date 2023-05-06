@@ -57,7 +57,7 @@ const Event = ({ id, start, end, children }: EventProps) => {
     >
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <button className="h-full w-full rounded-md bg-yellow-400">
+          <button className="flex h-full w-full rounded-md bg-yellow-400 p-2 text-left text-xs sm:text-sm">
             {children}
           </button>
         </DialogTrigger>
