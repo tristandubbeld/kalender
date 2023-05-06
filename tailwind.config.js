@@ -4,6 +4,18 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 module.exports = {
   darkMode: ["class"],
   content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+  safelist: [
+    // Safelist row-start for the calendar
+    {
+      pattern:
+        /row-start-(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23)/,
+    },
+    // Safelist row-end for the calendar
+    {
+      pattern:
+        /row-end-(2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)/,
+    },
+  ],
   theme: {
     container: {
       center: true,
