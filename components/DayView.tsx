@@ -1,6 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import { HOURS } from "@/lib/constants";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { EditEventDialog } from "@/components/EditEventDialog";
 import { useEvents } from "@/components/EventsProvider";
 import { TimeSlot } from "@/components/TimeSlot";
 
@@ -32,20 +36,33 @@ function convertTimeToPosition(time: string) {
 }
 
 type EventProps = {
+  id: string;
   start: string;
   end: string;
   children: React.ReactNode;
 };
 
-const Event = ({ start, end, children }: EventProps) => {
+const Event = ({ id, start, end, children }: EventProps) => {
   const startPosition = convertTimeToPosition(start);
   const endPosition = convertTimeToPosition(end);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <div
       className={`row-start-${startPosition} row-end-${endPosition} absolute col-start-2 h-full w-full px-0.5 `}
     >
-      <div className="h-full w-full rounded-md bg-yellow-400">{children}</div>
+      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+        <DialogTrigger asChild>
+          <button className="h-full w-full rounded-md bg-yellow-400">
+            {children}
+          </button>
+        </DialogTrigger>
+        <EditEventDialog id={id} close={closeDialog} />
+      </Dialog>
     </div>
   );
 };
@@ -73,10 +90,10 @@ export const DayView = ({ date }: DayViewProps) => {
           );
         })}
 
-        {Object.values(events).map((event) => {
+        {Object.values(events).map(({ id, start, end, name }) => {
           return (
-            <Event key={event.id} start={event.start} end={event.end}>
-              {event.name}
+            <Event key={id} id={id} start={start} end={end}>
+              {name}
             </Event>
           );
         })}

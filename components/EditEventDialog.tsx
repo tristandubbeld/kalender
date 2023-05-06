@@ -1,8 +1,5 @@
-"use client";
-
 import { useState } from "react";
 import formatDate from "date-fns/format";
-import { v4 as uuidv4 } from "uuid";
 
 import { Event } from "@/types/event";
 import { HOURS } from "@/lib/constants";
@@ -24,39 +21,28 @@ import {
 } from "@/components/ui/select";
 import { useEvents } from "@/components/EventsProvider";
 
-type CreateEventDialogProps = {
-  date: Date;
-  startTime?: string;
+type EditEventDialogProps = {
+  id: string;
   close: () => void;
 };
 
-function calculateEndTime(startTime: string) {
-  const endTime = HOURS.findIndex((hour) => hour === startTime) + 1;
-  return HOURS[endTime] || "00:00";
-}
+export const EditEventDialog = ({ id, close }: EditEventDialogProps) => {
+  const { events, updateEvent } = useEvents();
+  const currentEvent = events[id];
 
-export const CreateEventDialog = ({
-  date,
-  startTime = "00:00",
-  close,
-}: CreateEventDialogProps) => {
-  const { createEvent } = useEvents();
+  console.log("currentEvent", currentEvent);
 
-  const dateName = formatDate(date, "EEEE MMMM do");
-  // Calculate end time based on start time, one hour from
-  // the start time.
-  const endTime = calculateEndTime(startTime);
-
-  const [name, setName] = useState("");
-  const [start, setStart] = useState(startTime);
-  const [end, setEnd] = useState(endTime);
+  const dateName = formatDate(new Date(currentEvent.date), "EEEE MMMM do");
+  const [name, setName] = useState(currentEvent.name);
+  const [start, setStart] = useState(currentEvent.start);
+  const [end, setEnd] = useState(currentEvent.end);
 
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Create event</DialogTitle>
         <DialogDescription>
-          Create an event for {dateName}. The UI lib has a date with scrolling
+          Update event on {dateName}. The UI lib has a date with scrolling
           selects inside dialogs, sorry for that.
         </DialogDescription>
       </DialogHeader>
@@ -65,18 +51,14 @@ export const CreateEventDialog = ({
         onSubmit={(e) => {
           e.preventDefault();
 
-          // Generate a unique id for the event
-          const id = uuidv4();
-
           const event: Event = {
-            id,
-            date,
+            ...currentEvent,
             name,
             start,
             end,
           };
 
-          createEvent(id, event);
+          updateEvent(id, event);
           close();
         }}
       >
@@ -129,7 +111,7 @@ export const CreateEventDialog = ({
             </SelectContent>
           </Select>
         </div>
-        <Button type="submit">Create event</Button>
+        <Button type="submit">Update event</Button>
       </form>
     </DialogContent>
   );

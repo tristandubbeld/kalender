@@ -8,6 +8,7 @@ const EventsContext = createContext<
   | {
       events: { [key: string]: Event };
       createEvent: (id: string, event: Event) => void;
+      updateEvent: (id: string, event: Event) => void;
     }
   | undefined
 >(undefined);
@@ -61,8 +62,12 @@ export const EventsProvider = ({ date, children }: EventsProviderProps) => {
     setEvents(events);
   };
 
+  const updateEvent = (id: string, event: Event) => {
+    createEvent(id, event);
+  };
+
   return (
-    <EventsContext.Provider value={{ events, createEvent }}>
+    <EventsContext.Provider value={{ events, createEvent, updateEvent }}>
       {children}
     </EventsContext.Provider>
   );
