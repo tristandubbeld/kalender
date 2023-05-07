@@ -8,12 +8,20 @@ module.exports = {
     // Safelist row-start for the calendar
     {
       pattern:
-        /row-start-(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)/,
+        /row-start-(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25)/,
+    },
+    // Safelist col-start for the calendar
+    {
+      pattern: /col-start-(1|2|3|4|5|6|7)/,
     },
     // Safelist row-end for the calendar
     {
       pattern:
         /row-end-(2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)/, // 25 not necessary
+    },
+    // Safelist col-end for the calendar
+    {
+      pattern: /col-start-(2|3|4|5|6|7|8)/,
     },
   ],
   theme: {
@@ -83,10 +91,11 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       gridTemplateColumns: {
+        "cal-week": "min-content repeat(7, 1fr)",
         "cal-day": "min-content 1fr",
       },
       gridAutoRows: {
-        "cal-sm": "2rem",
+        "cal-sm": "minmax(2rem, auto)",
         "cal-lg": "2.5rem",
       },
       /**
@@ -112,6 +121,7 @@ module.exports = {
         22: "22",
         23: "23",
         24: "24",
+        25: "25",
       },
       /**
        * Extend the grid row end utility with our custom values because

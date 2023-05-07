@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { HOURS } from "@/lib/constants";
+import { convertTimeToPosition } from "@/lib/utils";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { EditEventDialog } from "@/components/EditEventDialog";
 import { useEvents } from "@/components/EventsProvider";
@@ -22,19 +23,6 @@ const DayRow = ({ date, time = "00:00", position }: DayRowProps) => {
   );
 };
 
-function convertTimeToPosition(time: string) {
-  if (time === "00:00") {
-    return 1;
-  }
-
-  // Remove trailing minutes and leading zero
-  const hour = time.replace(":00", "").replace(/^0/, "");
-  const hourNumber = parseInt(hour, 10);
-
-  // Add one to account for the grid rows starting at 1
-  return hourNumber + 1;
-}
-
 type EventProps = {
   id: string;
   start: string;
@@ -43,8 +31,10 @@ type EventProps = {
 };
 
 const Event = ({ id, start, end, children }: EventProps) => {
-  const startPosition = convertTimeToPosition(start);
-  const endPosition = convertTimeToPosition(end);
+  // Add one to account for the grid rows starting at 1
+  const startPosition = convertTimeToPosition(start) + 1;
+  const endPosition = convertTimeToPosition(end) + 1;
+
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const closeDialog = () => {
@@ -57,7 +47,7 @@ const Event = ({ id, start, end, children }: EventProps) => {
     >
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <button className="flex h-full w-full rounded-md bg-yellow-400 p-2 text-left text-xs sm:text-sm">
+          <button className="flex h-full w-full rounded-md bg-yellow-400 p-2 text-left text-xs dark:bg-orange-800 sm:text-sm">
             {children}
           </button>
         </DialogTrigger>

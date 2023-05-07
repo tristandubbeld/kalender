@@ -19,7 +19,7 @@ export default function DayPage({
   const dateNumber = formatDate(date, "d");
   const month = formatDate(date, "MMMM");
   const weekDay = formatDate(date, "EEEE");
-  const weekNumber = getWeek(date, { weekStartsOn: 1 });
+  const weekNumber = getWeek(date, { weekStartsOn: 1 }) - 1;
 
   const monthLink = `/${formatDate(date, "yyyy/MM")}`;
   const weekLink = `/${formatDate(date, "yyyy")}/week/${weekNumber}`;
