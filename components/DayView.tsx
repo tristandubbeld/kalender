@@ -18,7 +18,7 @@ const DayRow = ({ date, time = "00:00", position }: DayRowProps) => {
   return (
     <>
       <div className="pr-2 text-center text-sm leading-none">{time}</div>
-      <TimeSlot position={position} time={time} date={date} />
+      <TimeSlot position={position} time={time} date={date} side="full" />
     </>
   );
 };
