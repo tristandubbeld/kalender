@@ -27,7 +27,11 @@ export default function WeekPage({
 
   return (
     <div className="flex flex-col p-4">
-      <p>Note: Updating events not implemented for the week view.</p>
+      <p className="max-w-xl self-center text-center">
+        Note: Updating events not implemented for the week view. You can create
+        an event by clicking on a days timeslot. Click the date for the day view
+        and the month for the month view.
+      </p>
       <div className="h-4" />
       <h1 className="text-center font-semibold">
         <Link href={monthLink}>
